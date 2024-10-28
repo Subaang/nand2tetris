@@ -3,121 +3,254 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define targetEquality(txt) strcmp(instructionList[k]->target,txt)==0
-#define SP_BASE 256
-#define LCL_BASE 1256
-#define THIS_BASE 2256
-#define THAT_BASE 3256
-#define SP memory[0]
-#define LCL memory[1]
-#define THIS memory[2]
-#define THAT memory[3]
-#define i instructionList[k]->value
+#define targetEquality(txt) strcmp(instruction->target,txt)==0
+#define i instruction->value
+#define FILENAME "@test"
 
 
-
-/*
- * Stack starts from memory 256 of ram
- * I.E it starts from M = 256
- */
-
-
-void codeWriter(int number_of_instructions,vmInstruction **instructionList) {
-    int *memory = malloc(4096*sizeof(int));
-
-    SP = SP_BASE;
-    LCL = LCL_BASE;
-    THIS = THIS_BASE;
-    THAT = THAT_BASE;
-
-    int addr = -1; //Represents A register
-
-    int k = 0;
-    while(k < number_of_instructions) {
-        if(instructionList[k]->name == C_PUSH) {
+void codeWriter(vmInstruction *instruction) {
+    if(instruction->name == C_PUSH) {
             if(targetEquality("local")) {
-                addr = LCL+i;
-                printf("@%d\n",addr);
-                memory[SP] = memory[addr];
+                printf("@LCL\n");
                 printf("D=M\n");
-                printf("@%d\n",SP);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
                 printf("M=D\n");
-                SP++;
+                printf("@SP\n");
+                printf("M=M+1\n");
             }
             else if(targetEquality("this")) {
-                addr = THIS+i;
-                printf("@%d\n",addr);
-                memory[SP] = memory[addr];
+                printf("@THIS\n");
                 printf("D=M\n");
-                printf("@%d\n",SP);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
                 printf("M=D\n");
-                SP++;
+                printf("@SP\n");
+                printf("M=M+1\n");
             }
             else if(targetEquality("that")) {
-                addr = THAT+i;
-                printf("@%d\n",addr);
-                memory[SP] = memory[addr];
+                printf("@THAT\n");
                 printf("D=M\n");
-                printf("@%d\n",SP);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
                 printf("M=D\n");
-                SP++;
+                printf("@SP\n");
+                printf("M=M+1\n");
+            }
+            else if(targetEquality("argument")) {
+                printf("@ARG\n");
+                printf("D=M\n");
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M+1\n");
             }
             else if(targetEquality("constant")) {
-                memory[SP] = i;
-                printf("@%d\n",SP);
-                printf("M=%d\n",i);
-                SP++;
+                printf("@%d\n",i);
+                printf("D=A\n");
+                printf("@SP\n");
+                printf("A=M\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M+1\n");
+            }
+            else if(targetEquality("this")) {
+                printf("@5\n");
+                printf("D=A\n");
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M+1\n");
+            }
+            else if(targetEquality("static")) {
+                printf(FILENAME);
+                printf(".%d\n",i);
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M+1\n");
+            }
+            else if(targetEquality("pointer")) {
+                printf("@R3\n");
+                printf("D=A\n");
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("A=D\n");
+                printf("D=M\n");
+                printf("@SP\n");
+                printf("A=M\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M+1\n");
             }
             else {
                 printf("PUSH WHAT!!!");
             }
         }
 
-        if(instructionList[k]->name == C_POP) {
+    if(instruction->name == C_POP) {
             if(targetEquality("local")) {
-                addr = LCL+i;
-                SP--;
-                printf("@%d\n",SP);
-                memory[addr] = memory[SP];
+                printf("@LCL\n");
                 printf("D=M\n");
-                printf("@%d\n",addr);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("@R13\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M-1\n");
+                printf("A=M\n");
+                printf("D=M\n");
+                printf("@R13\n");
+                printf("A=M\n");
                 printf("M=D\n");
             }
             else if(targetEquality("this")) {
-                addr = THIS+i;
-                SP--;
-                printf("@%d\n",SP);
-                memory[addr] = memory[SP];
+                printf("@THIS\n");
                 printf("D=M\n");
-                printf("@%d\n",memory[addr]);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("@R13\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M-1\n");
+                printf("A=M\n");
+                printf("D=M\n");
+                printf("@R13\n");
+                printf("A=M\n");
                 printf("M=D\n");
             }
             else if(targetEquality("that")) {
-                addr = THAT+i;
-                SP--;
-                printf("@%d\n",SP);
-                memory[addr] = memory[SP];
+                printf("@THAT\n");
                 printf("D=M\n");
-                printf("@%d\n",memory[addr]);
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("@R13\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M-1\n");
+                printf("A=M\n");
+                printf("D=M\n");
+                printf("@R13\n");
+                printf("A=M\n");
                 printf("M=D\n");
             }
-            else if(targetEquality("constant")) {
-                printf("Invalid!");
-            }
-            else {
-                printf("POP WHAT!!!");
-            }
+            else if(targetEquality("argument")) {
+                printf("@ARG\n");
+                printf("D=M\n");
+                printf("@%d\n",i);
+                printf("D=D+A\n");
+                printf("@R13\n");
+                printf("M=D\n");
+                printf("@SP\n");
+                printf("M=M-1\n");
+                printf("A=M\n");
+                printf("D=M\n");
+                printf("@R13\n");
+                printf("A=M\n");
+                printf("M=D\n");
+        }
+        else if(targetEquality("temp")) {
+            printf("@5\n");
+            printf("D=A\n");
+            printf("@%d\n",i);
+            printf("D=D+A\n");
+            printf("@R13\n");
+            printf("M=D\n");
+            printf("@SP\n");
+            printf("M=M-1\n");
+            printf("A=M\n");
+            printf("D=M\n");
+            printf("@R13\n");
+            printf("A=M\n");
+            printf("M=D\n");
+        }
+        else if(targetEquality("constant")) {
+            printf("Invalid! pop constant?");
+        }
+        else if(targetEquality("static")) {
+            printf("@SP\n");
+            printf("M=M-1\n");
+            printf("A=M\n");
+            printf("D=M\n");
+            printf(FILENAME);
+            printf(".%d\n",i);
+            printf("M=D");
+        }
+        else if(targetEquality("pointer")) {
+            printf("@R3\n");
+            printf("D=A\n");
+            printf("@%d",i);
+            printf("D=D+A\n");
+            printf("@R13\n");
+            printf("M=D\n");
+            printf("@SP\n");
+            printf("M=M-1\n");
+            printf("A=M\n");
+            printf("D=M\n");
+            printf("@R13\n");
+            printf("A=M\n");
+            printf("M=D\n");
+        }
+        else {
+            printf("POP WHAT!!!");
+        }
 
         }
 
-        if(instructionList[k]->name == C_ARITHMENIC) {
+    if(instruction->name == C_ARITHMENIC) {
+        if(targetEquality("add")) {
+            printf("@SP\n");
+            printf("A=M\n");
+            printf("D=M\n");
+            printf("A=A-1\n");
+            printf("D=D+M\n");
+            printf("M=D\n");
+        }
+        else if(targetEquality("sub")) {
+            printf("@SP\n");
+            printf("A=M\n");
+            printf("D=M\n");
+            printf("A=A-1\n");
+            printf("D=M-D\n");
+            printf("M=D\n");
+        }
+        else if(targetEquality("neg")) {
+            printf("@SP\n");
+            printf("A=M-1\n");
+            printf("M=-M\n");
+            
+        }
 
         }
-        free(instructionList[k]->target);
-        free(instructionList[k]->command);
-        free(instructionList[k]);
-        k++;
-    }
 
-free(memory);
+
+    free(instruction->target);
+    free(instruction->command);
+    free(instruction);
+
 }
+

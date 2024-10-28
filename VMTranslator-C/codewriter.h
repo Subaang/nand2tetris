@@ -6,6 +6,6 @@
 
 #include "parser.h"
 
-extern void codeWriter(int number_of_instructions,vmInstruction **instructionList);
+extern void codeWriter(vmInstruction *instruction);
 
 #endif //CODEWRITER_H

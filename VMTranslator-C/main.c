@@ -51,13 +51,10 @@ int main(void) {
         printf("Unsuccessful");
     }
 
-    vmInstruction **instructionList = malloc(sizeof(vmInstruction)*i);
 
     for(int k = 0; k < i; k++) {
-        instructionList[k] = parse(LINE_LENGTH,content[k]);
+        codeWriter(parse(LINE_LENGTH,content[k]));
     }
-
-    codeWriter(i,instructionList);
 
 
 
