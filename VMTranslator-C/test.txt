@@ -1,0 +1,13 @@
+push constant 10
+pop local 0
+push constant 21
+push constant 22
+push constant 36
+pop this 6
+push constant 42
+push constant 45
+pop that 5
+pop that 2
+push constant 510
+push local 0
+push that 5
