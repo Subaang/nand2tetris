@@ -1,0 +1,1 @@
+This is the compiler for the nand2tetris course, written in python
